@@ -1,6 +1,7 @@
 import { notFoundError, ticketNotFoundError } from "@/errors";
 import hotelsRepository from "@/repositories/hotels-repository";
 import ticketRepository from "@/repositories/ticket-repository";
+import roomsRepository from "@/repositories/rooms-repository";
 
 async function listHotels(userId: number) {
   const userHasTicket = await ticketRepository.userHasPaidTicketWithHotel(userId);
@@ -24,7 +25,7 @@ async function listHotelRooms(hotelId: number, userId: number) {
     throw ticketNotFoundError();
   }
 
-  const roomsAvailable = await hotelsRepository.findHotelRooms(hotelId);
+  const roomsAvailable = await roomsRepository.findHotelRooms(hotelId);
   if (!roomsAvailable) {
     throw notFoundError();
   }

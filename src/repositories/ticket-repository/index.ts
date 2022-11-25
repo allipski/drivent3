@@ -22,6 +22,11 @@ async function userHasPaidTicketWithHotel(userId: number) {
       AND: [ {
         status: "PAID"
       }, {
+        TicketType: {
+          isRemote: false,
+          includesHotel: true
+        }
+      }, {
         Enrollment: {
           userId: userId
         }

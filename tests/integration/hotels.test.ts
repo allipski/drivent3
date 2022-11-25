@@ -7,9 +7,9 @@ import supertest from "supertest";
 import {
   createEnrollmentWithAddress,
   createUser,
-  createTicketType,
   createTicket,
   generateCreditCardData,
+  createTicketTypeWithHotel,
 } from "../factories";
 import { createHotelWithRooms } from "../factories/hotels-factory";
 import { cleanDb, generateValidToken } from "../helpers";
@@ -54,9 +54,9 @@ describe("GET /hotels", () => {
       const token = await generateValidToken(user);
       await createEnrollmentWithAddress(user);
       
-      const bodytwo = { userId: user.id };
+      const body = { userId: user.id };
 
-      const response = await server.get("/hotels").set("Authorization", `Bearer ${token}`).send(bodytwo);
+      const response = await server.get("/hotels").set("Authorization", `Bearer ${token}`).send(body);
 
       expect(response.status).toEqual(httpStatus.NOT_FOUND);
     });
@@ -65,7 +65,7 @@ describe("GET /hotels", () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const enrollment = await createEnrollmentWithAddress(user);
-      const ticketType = await createTicketType();
+      const ticketType = await createTicketTypeWithHotel();
       const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.RESERVED);
       await createHotelWithRooms();
 
@@ -122,9 +122,9 @@ describe("GET /hotels/:hotelId", () => {
 
       let hotelId;
 
-      const bodytwo = { userId: user.id };
+      const body = { userId: user.id };
 
-      const response = await server.get(`/hotels/${hotelId}`).set("Authorization", `Bearer ${token}`).send(bodytwo);
+      const response = await server.get(`/hotels/${hotelId}`).set("Authorization", `Bearer ${token}`).send(body);
 
       expect(response.status).toEqual(httpStatus.BAD_REQUEST);
     });
@@ -135,9 +135,9 @@ describe("GET /hotels/:hotelId", () => {
       await createEnrollmentWithAddress(user);
       const hotel = await createHotelWithRooms();
       
-      const bodytwo = { userId: user.id };
+      const body = { userId: user.id };
 
-      const response = await server.get(`/hotels/${hotel.id}`).set("Authorization", `Bearer ${token}`).send(bodytwo);
+      const response = await server.get(`/hotels/${hotel.id}`).set("Authorization", `Bearer ${token}`).send(body);
 
       expect(response.status).toEqual(httpStatus.NOT_FOUND);
     });
@@ -146,7 +146,7 @@ describe("GET /hotels/:hotelId", () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const enrollment = await createEnrollmentWithAddress(user);
-      const ticketType = await createTicketType();
+      const ticketType = await createTicketTypeWithHotel();
       const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.RESERVED);
       const hotel = await createHotelWithRooms();
 
